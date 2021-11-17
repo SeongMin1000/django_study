@@ -11,6 +11,7 @@
   <link href="{% static 'blog/bootstrap/bootstrap.min.css' %}" rel="stylesheet" media="screen">
   <!-- Custom styles for this template -->
   <link href="{% static 'blog/css/blog-post.css' %}" rel="stylesheet" media="screen">
+  <script src="https://kit.fontawesome.com/a6f82018fe.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <!-- Navigation -->
@@ -57,15 +58,32 @@
         <p>{{ post.created_at }}</p>
         <hr>
         <!-- Preview Image -->
-        {% if p.head_image %}
+        {% if post.head_image %}
             <img class="img-fluid rounded" src="{{ post.head_image.url }}" alt="{{ post.title }} head_image">
         {% else %}
-            <img class="img-fluid rounded" src="https://picsum.photos/seed/{{ post.id }}/800/200" alt="random_image" />
+            <img class="img-fluid rounded" src="https://picsum.photos/seed/{{ post.id }}/800/200" alt="random_image">
         {% endif %}
 
         <hr>
         <!-- Post Content -->
         <p>{{ post.content }}</p>
+
+        {% if post.file_upload %}
+          <a href="{{ post.file_upload.url }}" class="btn btn-outline-dark" role="button">
+            Download:
+
+            {% if post.get_file_ext == 'csv' %}
+              <i class="fas fa-file-csv"></i>
+            {% elif post.get_file_ext == 'xlsx' or post.get_file_ext == 'xls' %}
+              <i class="fas fa-file-excel"></i>
+            {% elif post.get_file_ext == 'docx' or post.get_file_ext == 'doc' %}
+              <i class="fas fa-file-word"></i>
+            {% else %}
+              <i class="far fa-file"></i>
+            {% endif %}
+              {{ post.get_file_name }}
+          </a>
+        {% endif %}
         <hr>
         <!-- Comments Form -->
         <div class="card my-4">
@@ -174,8 +192,7 @@
   <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p>
     </div>
     <!-- /.container -->
   </footer>
