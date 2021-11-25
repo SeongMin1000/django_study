@@ -30,7 +30,7 @@ class TestView(TestCase):
             author=self.user_obama
         )
 
-    def navbar_test(self,soup):
+    def navbar_test(self, soup):
         navbar = soup.nav
         self.assertIn('Blog', navbar.text)
         self.assertIn('About Me', navbar.text)
@@ -42,10 +42,10 @@ class TestView(TestCase):
         self.assertEqual(home_btn.attrs['href'], '/')
 
         blog_btn = navbar.find('a', text='Blog')
-        self.assertEqual(logo_btn.attrs['href'], '/blog/')
+        self.assertEqual(blog_btn.attrs['href'], '/blog/')
 
         about_me_btn = navbar.find('a', text='About Me')
-        self.assertEqual(logo_btn.attrs['href'], '/about_me')
+        self.assertEqual(about_me_btn.attrs['href'], '/about_me/')
 
     def category_card_test(self, soup):
         categories_card = soup.find('div', id='categories-card')
@@ -90,26 +90,24 @@ class TestView(TestCase):
         self.assertIn('아직 게시물이 없습니다', main_area.text)
 
     def test_post_detail(self):
-        post_001 = Post.objects.create(
-            title='첫 번째 포스트입니다.',
-            content='Hello World. We are the World.',
-            author=self.user_trump,
-        )
 
-        self.assertEqual(post_001.get_absolute_url(), '/blog/1/')
+        self.assertEqual(self.post_001.get_absolute_url(), '/blog/1/')
 
-        response = self.client.get(post_001.get_absolute_url())
+        response = self.client.get(self.post_001.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        self.navbar_test(soup)
 
-        self.assertIn(post_001.title, soup.title.text)
+        self.navbar_test(soup)
+        self.category_card_test(soup)
+
+        self.assertIn(self.post_001.title, soup.title.text)
 
         main_area = soup.find('div', id='main-area')
         post_area = main_area.find('div', id='post-area')
-        self.assertIn(post_001.title, post_area.text)
+        self.assertIn(self.post_001.title, post_area.text)
+        self.assertIn(self.category_programming.name, post_area.text)
 
         self.assertIn(self.user_trump.username.upper(), post_area.text)
 
-        self.assertIn(post_001.content, post_area.text)
+        self.assertIn(self.post_001.content, post_area.text)
