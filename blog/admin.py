@@ -1,5 +1,5 @@
 from django.contrib import admin
-from markdown.admin import MarkdownxModelAdmin
+from markdownx.admin import MarkdownxModelAdmin
 from .models import Post, Category, Tag
 
 admin.site.register(Post, MarkdownxModelAdmin)
