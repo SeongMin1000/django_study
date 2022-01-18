@@ -1,2 +1,2 @@
 # django_study
-make blog
+django_study
