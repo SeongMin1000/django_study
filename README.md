@@ -1,2 +1,2 @@
-# django_study
+# Keeper_study
 
